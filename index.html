@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas push</title>
+</head>
+<body>
+        <header>
+            <h1>Bienvenido</h1>
+        <p>Probando las notificaciones push con firebase</p>
+        </header>
+        
+        <button id="sign-in-btn" >Sign In</button>
+        <button id="sign-out">Sign out</button>
+        <button id="suscribe">Suscribe</button>
+
+        <!-- Firebase SDK-->
+        <script defer src="/__/firebase/12.0.0/firebase-app-compat.js"></script>
+
+        <script defer src="/__/firebase/12.0.0/firebase-auth-compat.js"></script>
+        <script defer src="/__/firebase/12.0.0/firebase-database-compat.js"></script>
+        <script defer src="/__/firebase/12.0.0/firebase-messaging-compat.js"></script>
+        <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+        <script defer type="module" src="/js/main.js"></script>
+</body>
+</html>
