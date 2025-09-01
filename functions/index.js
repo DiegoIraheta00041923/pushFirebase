@@ -16,6 +16,8 @@ if (!admin.apps.length) {
 
 
 exports.sendNotification = functions.https.onCall(async (data, context) => {
+    console.log("UID del usuario:", context.auth.uid);
+
    
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'Solo usuarios autenticados pueden enviar notificaciones.');

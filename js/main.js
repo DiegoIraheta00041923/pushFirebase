@@ -18,9 +18,8 @@ const firebaseConfig = {
   storageBucket: "prueba-noti-2db31.firebasestorage.app",
   messagingSenderId: "437866471554",
   appId: "1:437866471554:web:b04a9d04e9809009b3949b",
-  measurementId: "G-X3EL2XX0QJ"
+  measurementId: "G-X3EL2XX0QJ",
 };
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -161,6 +160,11 @@ async function susbscribeToNotifications(){
             const currentToken = await getToken(messaging, {vapidKey: vapidKey});
             if (currentToken){
                 console.log('Token de registro FCM exitoso');
+                const user = auth.currentUser;
+                    if (user) {
+                        const userRef = doc(db, "Usuarios", user.uid);
+                        await setDoc(userRef, { fcmToken: currentToken }, { merge: true });
+                    }
             }else{
                 console.warn("No se pudo obtener el token")
             }
