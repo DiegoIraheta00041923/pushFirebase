@@ -53,6 +53,11 @@ auth.onAuthStateChanged(async (user)=>{
         const token = await user.getIdToken();
         renderTasks();
         susbscribeToNotifications()
+
+        const sendNotificationBtn = document.getElementById("send-notification-btn");
+        if(sendNotificationBtn){
+            sendNotificationBtn.addEventListener('click',handleSendNotification);
+        }
     }else{
         userDisplay.textContent = "Invitado";
         tasksList.innerHTML = ''
@@ -189,7 +194,11 @@ const sendNotificationBtn = document.getElementById('send-notification-btn');
 
 async function handleSendNotification() {
     console.log("🚀 Botón clicado, intentando enviar notificación...");
-
+    user = auth.currentUser;
+    if(!user){
+        alert("Debes iniciar sesión");
+        return;
+    }
     const title = document.getElementById('notification-title').value;
     const body = document.getElementById('notification-body').value;
 
@@ -208,8 +217,10 @@ async function handleSendNotification() {
     }
 }
 
+/*
 sendNotificationBtn.addEventListener('click', (e) => {
     if(e.target && e.target.id== 'send-notification-btn'){
         handleSendNotification()
     }
 });
+*/
