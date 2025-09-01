@@ -190,8 +190,8 @@ auth.currentUser.getIdToken().then(token => {
 
 const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
 
-document.addEventListener("DOMContentLoaded", () => {
-    const sendNotificationBtn = document.getElementById("send-notification-btn");
+
+const sendNotificationBtn = document.getElementById("send-notification-btn");
 
 if(sendNotificationBtn){
 
@@ -216,6 +216,6 @@ if(sendNotificationBtn){
             alert('Error al enviar la notificación. Revisa la consola.');
         }
     });
-}    
-})
-
+}else{
+    console.error("El botón con ID 'send-notification-btn' no fue encontrado.");
+}
