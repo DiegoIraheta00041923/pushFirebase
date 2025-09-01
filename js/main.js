@@ -190,32 +190,33 @@ auth.currentUser.getIdToken().then(token => {
 
 const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
 
+async function handleSendNotification() {
+    console.log("🚀 Botón clicado, intentando enviar notificación...");
 
-const sendNotificationBtn = document.getElementById("send-notification-btn");
+    const title = document.getElementById('notification-title').value;
+    const body = document.getElementById('notification-body').value;
 
-if(sendNotificationBtn){
+    if (!title || !body) {
+        alert('Por favor, ingresa un título y un cuerpo para la notificación.');
+        return;
+    }
 
-    sendNotificationBtn.addEventListener('click', async () => {
-        console.log("🚀 Botón clicado, intentando enviar notificación...");
-        const Msgtitle = document.getElementById('notification-title').value;
-        const Msgbody = document.getElementById('notification-body').value;
-
-        if (!title || !body) {
-            alert('Por favor, ingresa un título y un cuerpo para la notificación.');
-            return;
-        }
-
-        try {
-            // Llama a la función de la nube con los datos del formulario
-            const result = await sendNotificationFunction({ title: Msgtitle, body: Msgbody });
-            console.log("sendNotificationFunction:", sendNotificationFunction);
-            console.log("Respuesta del servidor:", result.data);
-            alert('Notificación enviada con éxito.');
-        } catch (error) {
-            console.error("Error al llamar a la función:", error);
-            alert('Error al enviar la notificación. Revisa la consola.');
-        }
-    });
-}else{
-    console.error("El botón con ID 'send-notification-btn' no fue encontrado.");
+    try {
+        const result = await sendNotificationFunction({ title, body });
+        console.log("Respuesta del servidor:", result.data);
+        alert('Notificación enviada con éxito.');
+    } catch (error) {
+        console.error("Error al enviar la notificación:", error);
+        alert('Error al enviar la notificación. Revisa la consola.');
+    }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sendNotificationBtn = document.getElementById('send-notification-btn');
+
+    if (sendNotificationBtn) {
+        sendNotificationBtn.addEventListener('click', handleSendNotification);
+    } else {
+        console.error("El botón con ID 'send-notification-btn' no fue encontrado.");
+    }
+});
