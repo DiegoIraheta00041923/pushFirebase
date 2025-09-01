@@ -180,6 +180,10 @@ if(subscribeButton){
     subscribeButton.addEventListener('click',susbscribeToNotifications)
 }
 
+auth.currentUser.getIdToken().then(token => {
+   console.log("ID Token del usuario:", token);
+});
+
 //para mandar notificaciones
 
 const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
