@@ -212,7 +212,7 @@ async function handleSendNotification() {
     }
 }
 
-document.addEventListener('click', (e) => {
+sendNotificationBtn.addEventListener('click', (e) => {
     if(e.target && e.target.id== 'send-notification-btn'){
         handleSendNotification()
     }
