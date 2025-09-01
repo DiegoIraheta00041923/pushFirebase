@@ -12,21 +12,15 @@ import { getFirestore, doc, setDoc, collection, addDoc, getDocs, getDoc } from "
 import {getFunctions, httpsCallable} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-functions.js"
 const firebaseConfig = {
   apiKey: "AIzaSyAIkCpPpVAiIWROK1s7I3dDjJkS3jEj1WI",
-
   authDomain: "prueba-noti-2db31.firebaseapp.com",
-
   databaseURL: "https://prueba-noti-2db31-default-rtdb.firebaseio.com",
-
   projectId: "prueba-noti-2db31",
-
   storageBucket: "prueba-noti-2db31.firebasestorage.app",
-
   messagingSenderId: "437866471554",
-
   appId: "1:437866471554:web:b04a9d04e9809009b3949b",
-
-  measurementId: "G-X3EL2XX0QJ",
+  measurementId: "G-X3EL2XX0QJ"
 };
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
