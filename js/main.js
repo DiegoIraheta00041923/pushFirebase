@@ -175,31 +175,3 @@ async function susbscribeToNotifications(){
 if(subscribeButton){
     subscribeButton.addEventListener('click',susbscribeToNotifications)
 }
-
-//para mandar notificaciones
-
-const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
-
-const sendNotificationBtn = document.getElementById("send-notification-btn");
-
-if(sendNotificationBtn){
-    sendNotificationBtn.addEventListener('click', async () => {
-        const title = document.getElementById('notification-title').value;
-        const body = document.getElementById('notification-body').value;
-
-        if (!title || !body) {
-            alert('Por favor, ingresa un título y un cuerpo para la notificación.');
-            return;
-        }
-
-        try {
-            // Llama a la función de la nube con los datos del formulario
-            const result = await sendNotificationFunction({ title: title, body: body });
-            console.log("Respuesta del servidor:", result.data);
-            alert('Notificación enviada con éxito.');
-        } catch (error) {
-            console.error("Error al llamar a la función:", error);
-            alert('Error al enviar la notificación. Revisa la consola.');
-        }
-    });
-}
