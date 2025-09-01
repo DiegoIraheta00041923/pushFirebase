@@ -189,6 +189,7 @@ auth.currentUser.getIdToken().then(token => {
 //para mandar notificaciones
 
 const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
+const sendNotificationBtn = document.getElementById('send-notification-btn');
 
 async function handleSendNotification() {
     console.log("🚀 Botón clicado, intentando enviar notificación...");
@@ -211,12 +212,8 @@ async function handleSendNotification() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const sendNotificationBtn = document.getElementById('send-notification-btn');
-
-    if (sendNotificationBtn) {
-        sendNotificationBtn.addEventListener('click', handleSendNotification);
-    } else {
-        console.error("El botón con ID 'send-notification-btn' no fue encontrado.");
+document.addEventListener('click', (e) => {
+    if(e.target && e.target.id== 'send-notification-btn'){
+        handleSendNotification()
     }
 });
