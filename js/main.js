@@ -204,7 +204,7 @@ if(sendNotificationBtn){
 
         try {
             // Llama a la función de la nube con los datos del formulario
-            const result = await sendNotificationFunction({ title: title, body: body });
+            const result = await sendNotification({ title: title, body: body });
             console.log("Respuesta del servidor:", result.data);
             alert('Notificación enviada con éxito.');
         } catch (error) {
