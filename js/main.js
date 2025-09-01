@@ -48,6 +48,7 @@ if (signInButton) {
 
 auth.onAuthStateChanged(async (user)=>{
     if(user){
+        console.log("Usuario logueado", user.uid);
         userDisplay.textContent = user.displayName;
         await saveUserProfileToFirestore(user);
         renderTasks();
@@ -55,7 +56,9 @@ auth.onAuthStateChanged(async (user)=>{
 
         const sendNotificationBtn = document.getElementById("send-notification-btn");
         if(sendNotificationBtn){
-            sendNotificationBtn.addEventListener('click',handleSendNotification);
+            sendNotificationBtn.addEventListener('click', async() =>{
+                await handleSendNotification(user);
+            });
         }
     }else{
         userDisplay.textContent = "Invitado";
@@ -191,9 +194,9 @@ if(subscribeButton){
 const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
 const sendNotificationBtn = document.getElementById('send-notification-btn');
 
-async function handleSendNotification() {
+async function handleSendNotification(user) {
     console.log("🚀 Botón clicado, intentando enviar notificación...");
-    const user = auth.currentUser;
+    
     if(!user){
         alert("Debes iniciar sesión");
         return;
