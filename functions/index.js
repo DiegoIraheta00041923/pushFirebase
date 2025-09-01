@@ -15,6 +15,48 @@ if (!admin.apps.length) {
     admin.initializeApp();
 }
 
+exports.sendNotificationsTry = functions.https.onRequest((req, res) => {
+    console.log("sendNotifications llamada (antes de CORS)"); // ✅ Primer log
+
+    // Manejo de CORS
+    cors(req, res, () => {
+        console.log("Dentro del callback de CORS"); // ✅ Segundo log
+
+        // Revisar método HTTP
+        if (req.method === 'OPTIONS') {
+            console.log("Preflight OPTIONS recibido");
+            return res.status(204).send('');
+        }
+
+        if (req.method !== 'POST') {
+            console.log("Método no permitido:", req.method);
+            return res.status(405).send('Método no permitido');
+        }
+
+        try {
+            // Revisar headers
+            const authHeader = req.headers.authorization;
+            console.log("Header de autorización recibido:", authHeader);
+
+            if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                console.log("Token de autorización no proporcionado o incorrecto");
+                return res.status(401).send({ error: 'No se proporcionó token de autenticación' });
+            }
+
+            // Decodificar token (simulado para prueba)
+            const idToken = authHeader.split('Bearer ')[1];
+            // En esta versión mínima no se verifica realmente, solo log
+            console.log('Token recibido para verificación:', idToken);
+
+            // Respuesta de prueba
+            res.send({ message: 'Función sendNotifications ejecutada correctamente' });
+        } catch (error) {
+            console.error('Error en la función:', error);
+            return res.status(500).send({ error: error.message || 'Error desconocido' });
+        }
+    });
+});
+
 exports.sendNotifications = functions.https.onRequest((req, res) => {
     console.log("sendNotifications llamada antes de CORS");
     cors(req, res, async () => { // Manejo de CORS

@@ -210,7 +210,7 @@ async function handleSendNotification() {
     }
 
     try {
-        const result = await fetch('https://sendnotifications-efsmkav76q-uc.a.run.app',{
+        const result = await fetch('https://sendnotificationstry-efsmkav76q-uc.a.run.app',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
