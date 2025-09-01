@@ -75,14 +75,15 @@ function signIn() {
     });
 }
 
-async function saveUserProfileToFirestore(user){
+async function saveUserProfileToFirestore(user, fcmToken){
     try{
         const userRef = doc(db, "Usuarios", user.uid);
         const userDoc = await getDoc(userRef);
         await setDoc(userRef,{
             uid: user.uid,
             nombre: user.displayName || 'N/A',
-            email: user.email
+            email: user.email,
+            fcmToken: fcmToken
         }, {merge: true})
         console.log("Perfil de usuario guardado/actualizado en Firestore:", user.uid);
         if(!userDoc.exists()){
@@ -190,8 +191,6 @@ if(subscribeButton){
 
 //para mandar notificaciones
 
-const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
-
 
 async function handleSendNotification() {
     const user = auth.currentUser;
@@ -219,7 +218,7 @@ async function handleSendNotification() {
             },
             body: JSON.stringify({title,body})
         });
-        const data = await result.json;
+        const data = await result.json();
         console.log("Respuesta del servidor:", data);
         alert('Notificación enviada con éxito.');
     } catch (error) {
@@ -227,11 +226,3 @@ async function handleSendNotification() {
         alert('Error al enviar la notificación. Revisa la consola.');
     }
 }
-
-/*
-sendNotificationBtn.addEventListener('click', (e) => {
-    if(e.target && e.target.id== 'send-notification-btn'){
-        handleSendNotification()
-    }
-});
-*/
