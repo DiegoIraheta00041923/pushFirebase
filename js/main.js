@@ -50,6 +50,7 @@ auth.onAuthStateChanged(async (user)=>{
     if(user){
         userDisplay.textContent = user.displayName;
         await saveUserProfileToFirestore(user);
+        const token = await user.getIdToken();
         renderTasks();
         susbscribeToNotifications()
     }else{
@@ -162,8 +163,9 @@ async function susbscribeToNotifications(){
                 console.log('Token de registro FCM exitoso');
                 const user = auth.currentUser;
                     if (user) {
-                        const userRef = doc(db, "Usuarios", user.uid);
-                        await setDoc(userRef, { fcmToken: currentToken }, { merge: true });
+                        await setDoc(doc(db, "Usuarios",user.uid), {
+                            fcmToken: currentToken
+                        }, {merge: true});
                     }
             }else{
                 console.warn("No se pudo obtener el token")
