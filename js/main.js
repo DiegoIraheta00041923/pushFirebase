@@ -50,7 +50,6 @@ auth.onAuthStateChanged(async (user)=>{
     if(user){
         userDisplay.textContent = user.displayName;
         await saveUserProfileToFirestore(user);
-        const token = await user.getIdToken();
         renderTasks();
         susbscribeToNotifications()
 
@@ -194,7 +193,7 @@ const sendNotificationBtn = document.getElementById('send-notification-btn');
 
 async function handleSendNotification() {
     console.log("🚀 Botón clicado, intentando enviar notificación...");
-    user = auth.currentUser;
+    const user = auth.currentUser;
     if(!user){
         alert("Debes iniciar sesión");
         return;
