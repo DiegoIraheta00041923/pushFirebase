@@ -193,7 +193,9 @@ const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
 const sendNotificationBtn = document.getElementById("send-notification-btn");
 
 if(sendNotificationBtn){
+
     sendNotificationBtn.addEventListener('click', async () => {
+        console.log("🚀 Botón clicado, intentando enviar notificación...");
         const title = document.getElementById('notification-title').value;
         const body = document.getElementById('notification-body').value;
 
@@ -204,7 +206,8 @@ if(sendNotificationBtn){
 
         try {
             // Llama a la función de la nube con los datos del formulario
-            const result = await sendNotification({ title: title, body: body });
+            const result = await sendNotificationFunction({ title: title, body: body });
+            console.log("sendNotificationFunction:", sendNotificationFunction);
             console.log("Respuesta del servidor:", result.data);
             alert('Notificación enviada con éxito.');
         } catch (error) {
