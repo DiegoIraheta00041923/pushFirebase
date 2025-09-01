@@ -16,14 +16,28 @@ if (!admin.apps.length) {
 }
 
 exports.sendNotifications = functions.https.onRequest((req, res) => {
+    console.log("sendNotifications llamada antes de CORS");
     cors(req, res, async () => { // Manejo de CORS
+        console.log("sendNotifications llamada");
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+
+        if(req.method === 'OPTIONS'){
+             console.log("Preflight OPTIONS recibido");
+            return res.status(204).send('');
+        }
+
         if (req.method !== 'POST') {
+            console.log("Método no permitido:", req.method);
             return res.status(405).send('Método no permitido');
         }
 
         try {
             // Verificar token
             const authHeader = req.headers.authorization;
+            console.log("Header de autorización recibido:", authHeader);
             if (!authHeader || !authHeader.startsWith('Bearer ')) {
                 return res.status(401).send({ error: 'No se proporcionó token de autenticación' });
             }
@@ -54,12 +68,18 @@ exports.sendNotifications = functions.https.onRequest((req, res) => {
                 const user = doc.data();
                 if (user.fcmToken && typeof user.fcmToken === 'string') tokens.push(user.fcmToken);
             });
-
+            console.log("Tokens", tokens)
             if (tokens.length === 0) return res.send({ message: 'No se encontraron tokens.' });
 
-            const payload = { notification: { title, body } };
+           /* const payload = { registration_ids: tokens,
+                 notification: { title, body } };
+            */
             let successCount = 0;
-            const response = await admin.messaging().sendToDevice(tokens, payload);
+            const response = await admin.messaging().sendEachForMulticast({
+                tokens: tokens,
+                notification: {title, body}
+            });
+
             response.results.forEach((result,index) => {
                 if(result.error){
                     console.error(`Error con el token ${tokens[index]}:`, result.error);
@@ -67,9 +87,8 @@ exports.sendNotifications = functions.https.onRequest((req, res) => {
                     successCount++;
                 }
             })
-            console.log('Notificación enviada:', response.successCount);
 
-            return res.send({ message: `Notificación enviada a ${response.successCount} dispositivos.` });
+            return res.send({ message: `Notificación enviada a ${successCount} dispositivos.` });
 
         } catch (error) {
             console.error('Error enviando notificación:', error);
