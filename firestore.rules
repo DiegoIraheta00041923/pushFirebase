@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Reglas para la colección de usuarios de nivel superior
+    match /Usuarios/{userId} {
+      // Permite que un usuario lea su propio documento de perfil
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Permite que un usuario cree o actualice su propio documento de perfil
+      // `request.auth.uid == userId`: Asegura que el UID del usuario autenticado coincida con el ID del documento que está intentando escribir
+      // `request.resource.data.uid == userId`: Opcional, asegura que el campo 'uid' dentro del documento también coincida.
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+
+      // Opcional: Si quieres que solo puedan leer un documento de usuario
+      // pero no crear uno si no es el suyo, usa esto:
+      // allow create: if request.auth != null && request.auth.uid == userId;
+      // allow update: if request.auth != null && request.auth.uid == userId;
+      // allow delete: if false; // Normalmente no quieres que los usuarios borren sus perfiles
+
+
+      // Reglas para la subcolección 'tareas' dentro de cada usuario
+      match /tareas/{taskId} {
+        // Permite que un usuario lea y escriba (crear, actualizar, eliminar)
+        // las tareas solo si están en su propia subcolección de tareas.
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Si tuvieras otras colecciones, necesitarías reglas específicas para ellas.
+    // Por ejemplo, si tuvieras una colección de "posts públicos":
+    // match /posts/{postId} {
+    //   allow read: true; // Cualquiera puede leer
+    //   allow create, update, delete: if request.auth != null; // Solo autenticados pueden escribir
+    // }
+
+  }
+}

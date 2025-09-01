@@ -7,11 +7,9 @@ import {
   signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 // Para la mensajería (Cloud Messaging)
-import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-messaging.js";
-// Para Firestore
-import { getFirestore, doc, setDoc, collection, addDoc, getDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-// Para Cloud Functions
-import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-functions.js";
+import { getMessaging, getToken} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-messaging.js";
+import { getFirestore, doc, setDoc, collection, addDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import {getFunctions, httpsCallable} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-functions.js"
 const firebaseConfig = {
   apiKey: "AIzaSyAIkCpPpVAiIWROK1s7I3dDjJkS3jEj1WI",
 
