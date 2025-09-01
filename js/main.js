@@ -37,6 +37,7 @@ const defaultTasks = [
 const signInButton = document.getElementById("sign-in-btn");
 const signOutButton = document.getElementById("sign-out");
 const subscribeButton = document.getElementById("suscribe");
+const sendNotificationBtn = document.getElementById("send-notification-btn");
 const userDisplay = document.getElementById("user-display")
 const tasksList = document.getElementById("tasks-list")
 
@@ -54,11 +55,9 @@ auth.onAuthStateChanged(async (user)=>{
         renderTasks();
         susbscribeToNotifications()
 
-        const sendNotificationBtn = document.getElementById("send-notification-btn");
+
         if(sendNotificationBtn){
-            sendNotificationBtn.addEventListener('click', async() =>{
-                await handleSendNotification(user);
-            });
+            sendNotificationBtn.addEventListener('click',handleSendNotification);
         }
     }else{
         userDisplay.textContent = "Invitado";
@@ -192,15 +191,17 @@ if(subscribeButton){
 //para mandar notificaciones
 
 const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
-const sendNotificationBtn = document.getElementById('send-notification-btn');
 
-async function handleSendNotification(user) {
-    console.log("🚀 Botón clicado, intentando enviar notificación...");
+
+async function handleSendNotification() {
+    const user = auth.currentUser;
     
     if(!user){
         alert("Debes iniciar sesión");
         return;
     }
+    console.log("🚀 Botón clicado, intentando enviar notificación...");
+
     const title = document.getElementById('notification-title').value;
     const body = document.getElementById('notification-body').value;
 
