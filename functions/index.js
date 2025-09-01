@@ -117,6 +117,24 @@ exports.sendNotifications = functions.https.onRequest((req, res) => {
                  notification: { title, body } };
             */
             let successCount = 0;
+            
+            for (const token of tokens){
+                try{
+                    await admin.messaging().send({
+                        token,
+                        notification: {title, body}
+                    });
+                    successCount++;
+                }catch(error){
+                    errors.push({ token, error: error.message });
+                }
+            }
+
+            return res.send({
+                message: `Notifiacion enviada a ${successCount} dispositivos.`,
+                errors
+            })
+            /*
             const response = await admin.messaging().sendEachForMulticast({
                 tokens: tokens,
                 notification: {title, body}
@@ -131,7 +149,7 @@ exports.sendNotifications = functions.https.onRequest((req, res) => {
             })
 
             return res.send({ message: `Notificación enviada a ${successCount} dispositivos.` });
-
+            */
         } catch (error) {
             console.error('Error enviando notificación:', error);
             return res.status(500).send({ error: error.message || 'Ocurrió un error al enviar la notificación.' });
