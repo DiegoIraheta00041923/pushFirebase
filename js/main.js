@@ -194,11 +194,11 @@ if(subscribeButton){
 
 async function handleSendNotification() {
     const user = auth.currentUser;
-    const idToken = await user.getIdToken();
     if(!user){
         alert("Debes iniciar sesión");
         return;
     }
+    const idToken = await user.getIdToken();
     console.log("🚀 Botón clicado, intentando enviar notificación...");
 
     const title = document.getElementById('notification-title').value;
@@ -210,7 +210,7 @@ async function handleSendNotification() {
     }
 
     try {
-        const result = await fetch('https://us-central1-prueba-noti-2db31.cloudfunctions.net/sendNotifications',{
+        const result = await fetch('https://sendNotifications-us-central1-prueba-noti-2db31.cloudfunctions.net',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

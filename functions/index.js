@@ -73,7 +73,7 @@ exports.sendNotifications = functions.https.onRequest((req, res) => {
 
         } catch (error) {
             console.error('Error enviando notificación:', error);
-            return res.status(500).send({ error: 'Ocurrió un error al enviar la notificación.' });
+            return res.status(500).send({ error: error.message || 'Ocurrió un error al enviar la notificación.' });
         }
     });
 });
