@@ -15,29 +15,35 @@ if (!admin.apps.length) {
 }
 
 
-exports.sendNotification = functions.https.onCall(async (data, context) => {
-    console.log("UID del usuario:", context.auth.uid);
-
-   
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'Solo usuarios autenticados pueden enviar notificaciones.');
-    }
-
+exports.sendNotifications = functions.https.onRequest(async (req, res) => {
     
-    const { title, body } = data;
-
-    if (!title || !body) {
-        throw new functions.https.HttpsError('invalid-argument', 'El título y el cuerpo del mensaje son requeridos.');
+   
+    if (req.method != 'POST') {
+        return res.status(405).send('Método no permitido');
     }
 
     try {
+        const authHeader = req.headers.authorization;
+        if(!authHeader || !authHeader.startsWith('Bearer ')){
+            return res.status(401).send({ error: 'No se proporcionó token de autenticación' });
+        }
+
+        const idToken = authHeader.split('Bearer ')[1];
+
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        console.log('Usuario autenticado: ', decodedToken.uid);
+
+        const {title, body} = req.body;
+        if (!title || !body) {
+            return res.status(400).send({ error: 'Título y cuerpo son requeridos' });
+        }
+
         const usersRef = admin.firestore().collection('Usuarios');
         const snapshot = await usersRef.get();
         const tokens = [];
 
         snapshot.forEach(doc => {
             const user = doc.data();
-            
             if (user.fcmToken && typeof user.fcmToken === 'string') {
                 tokens.push(user.fcmToken);
             }
@@ -45,20 +51,18 @@ exports.sendNotification = functions.https.onCall(async (data, context) => {
 
         if (tokens.length === 0) {
             console.log('No se encontraron tokens para enviar notificaciones.');
-            return { message: 'No se encontraron tokens.' };
+            return res.send({ message: 'No se encontraron tokens.' });
         }
 
         const payload = {
-            notification: {
-                title: title,
-                body: body
-            }
+            notification: { title, body }
         };
 
         const response = await admin.messaging().sendToDevice(tokens, payload);
         console.log('Notificación enviada con éxito:', response.successCount, 'mensajes.');
 
-        return { message: `Notificación enviada con éxito a ${response.successCount} dispositivos.` };
+        return res.send({ message: `Notificación enviada a ${response.successCount} dispositivos.` });
+
 
     } catch (error) {
         console.error('Error al enviar la notificación:', error);

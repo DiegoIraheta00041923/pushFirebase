@@ -195,7 +195,7 @@ const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
 
 async function handleSendNotification() {
     const user = auth.currentUser;
-    
+    const idToken = await user.getIdToken();
     if(!user){
         alert("Debes iniciar sesión");
         return;
@@ -211,8 +211,16 @@ async function handleSendNotification() {
     }
 
     try {
-        const result = await sendNotificationFunction({ title, body });
-        console.log("Respuesta del servidor:", result.data);
+        const result = await fetch('https://us-central1-prueba-noti-2db31.cloudfunctions.net/sendNotifications',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + idToken
+            },
+            body: JSON.stringify({title,body})
+        });
+        const data = await result.json;
+        console.log("Respuesta del servidor:", data);
         alert('Notificación enviada con éxito.');
     } catch (error) {
         console.error("Error al enviar la notificación:", error);
