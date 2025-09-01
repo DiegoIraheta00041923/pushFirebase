@@ -194,7 +194,7 @@ const sendNotificationFunction = httpsCallable(functions, 'sendNotification');
 const sendNotificationBtn = document.getElementById("send-notification-btn");
 
 if(sendNotificationBtn){
-
+    
     sendNotificationBtn.addEventListener('click', async () => {
         console.log("🚀 Botón clicado, intentando enviar notificación...");
         const title = document.getElementById('notification-title').value;
