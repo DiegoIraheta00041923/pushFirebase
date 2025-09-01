@@ -210,7 +210,7 @@ async function handleSendNotification() {
     }
 
     try {
-        const result = await fetch('https://sendNotifications-us-central1-prueba-noti-2db31.cloudfunctions.net',{
+        const result = await fetch('https://us-central1-prueba-noti-2db31.cloudfunctions.net/sendNotifications',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
