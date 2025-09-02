@@ -262,6 +262,6 @@ async function getAllNotifications() {
             notisList.appendChild(li)
         })
     }catch(error){
-            console.error("Error en notificaciones")
+            console.error("Error en notificaciones", error);
     }
 }
