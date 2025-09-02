@@ -40,6 +40,7 @@ const subscribeButton = document.getElementById("suscribe");
 const sendNotificationBtn = document.getElementById("send-notification-btn");
 const userDisplay = document.getElementById("user-display")
 const tasksList = document.getElementById("tasks-list")
+const notisList = document.getElementById("my-notifications")
 
 if (signInButton) {
     signInButton.addEventListener('click', signIn);
@@ -55,6 +56,7 @@ auth.onAuthStateChanged(async (user)=>{
         renderTasks();
         susbscribeToNotifications()
 
+        getAllNotifications();
 
         if(sendNotificationBtn){
             sendNotificationBtn.addEventListener('click',handleSendNotification);
@@ -247,3 +249,19 @@ onMessage(messaging, (payload) => {
     icon: payload.notification.icon || "/firebase-logo.png",
   });
 });
+
+async function getAllNotifications() {
+    notisList.innerHTML = '';
+    try{
+        const notificationsRef = collection(db, "Notificacitions");
+        const querySnapshot = await getDocs(notificationsRef);
+        querySnapshot.forEach((doc)=>{
+            const noti = {id:doc.id,...doc.data()};
+            const li = document.createElement('li');
+            li.textContent = `${notisList.title}: ${noti.body}`;
+            notisList.appendChild(li)
+        })
+    }catch(error){
+            console.error("Error en notificaciones")
+    }
+}
