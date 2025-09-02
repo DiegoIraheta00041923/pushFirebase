@@ -258,7 +258,7 @@ async function getAllNotifications() {
         querySnapshot.forEach((doc)=>{
             const noti = {id:doc.id,...doc.data()};
             const li = document.createElement('li');
-            li.textContent = `${notisList.title}: ${noti.body}`;
+            li.textContent = `${noti.title}: ${noti.body}`;
             notisList.appendChild(li)
         })
     }catch(error){
