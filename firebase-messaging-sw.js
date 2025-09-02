@@ -22,14 +22,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
+messaging.onBackgroundMessage(function(payload){
     console.log('[firebase-messaging-sw.js] Mensaje recibido en segundo plano ', payload);
 
-    const notificationTitle = payload.notification.title || 'Nueva noti';
+    const notificationTitle = payload.notification?.title || 'Nueva noti';
     const notificationOptions = {
         body: payload.notification.body,
         icon: payload.notification.icon || '/firebase-logo.png',
     };
 
     self.registration.showNotification(notificationTitle,notificationOptions)
-})
+});

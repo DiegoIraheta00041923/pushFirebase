@@ -228,3 +228,14 @@ async function handleSendNotification() {
         alert('Error al enviar la notificación. Revisa la consola.');
     }
 }
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/firebase-messaging-sw.js")
+    .then((registration) => {
+      console.log("Service Worker registrado:", registration);
+    })
+    .catch((err) => {
+      console.error("Error registrando Service Worker:", err);
+    });
+}
+
