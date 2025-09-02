@@ -159,7 +159,7 @@ if (signOutButton) {
 } else {
     console.error("El botón con ID 'sign-out' no fue encontrado.");
 }
-
+//para suscribirse en las notificaciones
 async function susbscribeToNotifications(){
     try{
         const permission = await Notification.requestPermission();
@@ -169,7 +169,7 @@ async function susbscribeToNotifications(){
             const vapidKey = "BHqW4J1W-kVfZ5txCWbSG37tNJbcCIbV3oEpbjxPfo0XALPHD3r7Y6SWMQlaKxiORSu-YEqFVKmxo2buKom_u1s"
             const currentToken = await getToken(messaging, {vapidKey: vapidKey});
             if (currentToken){
-                console.log('Token de registro FCM exitoso', currentToken);
+                console.log('Token de registro FCM exitoso');
                 const user = auth.currentUser;
                     if (user) {
                         await setDoc(doc(db, "Usuarios",user.uid), {
@@ -250,6 +250,7 @@ onMessage(messaging, (payload) => {
   });
 });
 
+//obtener todas las notificaciones
 async function getAllNotifications() {
     notisList.innerHTML = '';
     try{

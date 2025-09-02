@@ -9,12 +9,12 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const cors = require('cors')({ origin: true }); // Permite cualquier origen, puedes restringir a tu dominio
+const cors = require('cors')({ origin: true }); // Permite cualquier origen, puedes restringir a tu dominio (ayuda de IA)
 
 if (!admin.apps.length) {
     admin.initializeApp();
 }
-
+//Funcion de prueba para saber si el flujo estaba correcto (ayuda de IA)
 exports.sendNotificationsTry = functions.https.onRequest((req, res) => {
     console.log("sendNotifications llamada (antes de CORS)"); // ✅ Primer log
 
