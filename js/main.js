@@ -167,12 +167,14 @@ async function susbscribeToNotifications(){
             const vapidKey = "BHqW4J1W-kVfZ5txCWbSG37tNJbcCIbV3oEpbjxPfo0XALPHD3r7Y6SWMQlaKxiORSu-YEqFVKmxo2buKom_u1s"
             const currentToken = await getToken(messaging, {vapidKey: vapidKey});
             if (currentToken){
-                console.log('Token de registro FCM exitoso');
+                console.log('Token de registro FCM exitoso', currentToken);
                 const user = auth.currentUser;
                     if (user) {
                         await setDoc(doc(db, "Usuarios",user.uid), {
                             fcmToken: currentToken
                         }, {merge: true});
+
+                        console.log("Token guardado")
                     }
             }else{
                 console.warn("No se pudo obtener el token")

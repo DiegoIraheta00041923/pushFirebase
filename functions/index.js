@@ -117,6 +117,7 @@ exports.sendNotifications = functions.https.onRequest((req, res) => {
                  notification: { title, body } };
             */
             let successCount = 0;
+            const errors = [];
             
             for (const token of tokens){
                 try{
